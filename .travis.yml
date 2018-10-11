@@ -1,0 +1,11 @@
+language: csharp
+mono: latest
+sudo: required
+dotnet: 2.0.3
+solution: Lob.Net.sln
+install:
+  - dotnet restore
+  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release Lob.Net.sln
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Lob.Net.Tests/bin/Release/Lob.Net.Tests.dll
