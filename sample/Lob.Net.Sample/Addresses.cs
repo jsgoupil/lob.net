@@ -2,7 +2,6 @@
 using Lob.Net.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Lob.Net.Sample

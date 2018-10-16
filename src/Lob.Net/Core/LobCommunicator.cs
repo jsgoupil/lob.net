@@ -2,7 +2,6 @@
 using Lob.Net.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,13 +12,13 @@ namespace Lob.Net
 {
     internal class LobCommunicator : ILobCommunicator
     {
-        protected readonly DefaultContractResolver contractResolver;
-        protected readonly JsonSerializerSettings serializerSettings;
+        protected readonly LobSerializerSettings serializerSettings;
         protected readonly HttpClient client;
 
         public LobCommunicator(
             IOptions<LobOptions> lobOptions,
-            IHttpClientFactory httpClientFactory
+            IHttpClientFactory httpClientFactory,
+            LobSerializerSettings serializerSettings
         )
         {
             var apiKey = lobOptions.Value.ApiKey;
@@ -38,15 +37,7 @@ namespace Lob.Net
             var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{apiKey}:"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
 
-            contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            };
-            serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = contractResolver,
-                NullValueHandling = NullValueHandling.Ignore
-            };
+            this.serializerSettings = serializerSettings;
         }
 
         async Task<T> ILobCommunicator.GetAsync<T>(string url)

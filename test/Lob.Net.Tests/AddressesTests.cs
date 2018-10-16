@@ -1,10 +1,8 @@
-using Lob.Net.Exceptions;
 using Lob.Net.Models;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;

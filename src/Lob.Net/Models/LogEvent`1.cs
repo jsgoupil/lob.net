@@ -2,7 +2,7 @@
 
 namespace Lob.Net.Models
 {
-    public class Event<T>
+    public class LobEvent<T>
     {
         public string Id { get; set; }
         public T Body { get; set; }

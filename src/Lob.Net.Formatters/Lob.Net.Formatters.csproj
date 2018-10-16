@@ -2,30 +2,33 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
-    <AssemblyName>Lob.Net</AssemblyName>
-    <RootNamespace>Lob.Net</RootNamespace>
+    <AssemblyName>Lob.Net.Formatters</AssemblyName>
+    <RootNamespace>Lob.Net.Formatters</RootNamespace>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Wrapper for the Lob.com API. Sends snail mail with this .NET API.</Description>
+    <Description>Wrapper for the Lob.com API. Formatters used for Webhooks.</Description>
     <Author>Jean-Sébastien Goupil</Author>
     <Authors>Jean-Sébastien Goupil</Authors>
-    <Title>Lob.Net - Snail Mail API</Title>
+    <Title>Lob.Net.Formatters - For Webhooks</Title>
     <Copyright>Copyright © Jean-Sébastien Goupil 2018</Copyright>
     <Version>0.1.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>mail snailmail lob postage letter postcard check</PackageTags>
+    <PackageTags>mail snailmail lob postage letter postcard check webhooks formatters</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/jsgoupil/lob.net/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/jsgoupil/lob.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jsgoupil/lob.net</RepositoryUrl>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.3" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lob.Net\Lob.Net.csproj" />
+  </ItemGroup>
 </Project>

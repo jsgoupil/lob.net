@@ -157,6 +157,57 @@ public interface ILobAddresses
 
 Follow the other examples in the sample folder.
 
+
+### WebHooks ###
+You need to install this NuGet package:
+
+```
+PM> Install-Package Lob.Net.Formatters
+```
+
+The webhooks must be configured with Mvc with the following code:
+
+```C#
+services.AddMvc()
+	.AddLobFormatters();
+```
+
+Create a controller and actions like this:
+```C#
+[AllowAnonymous]
+[Produces("application/json")]
+[Route("api/[controller]")]
+public class ExternalsController : Controller
+{
+    public ExternalsController(
+    )
+    {
+    }
+
+    [HttpPost]
+    [Route("postcard")]
+    public IActionResult LobPostcard([FromBody] Lob.Net.Models.LobEvent<Lob.Net.Models.PostcardResponse> evt)
+    {
+        // If you know exactly which type you are getting.
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("object")]
+    public IActionResult LobObject([FromBody] Lob.Net.Models.LobEvent evt)
+    {
+        // If you accept any type, use the non-generic version.
+        if (evt.EventType.Resource == EventTypeResource.Postcards)
+        {
+            var postcardEvent = evt.ToPostcard();
+        }
+
+        return Ok();
+    }
+}
+```
+
 ## Contributing
 
 Contributions are welcome. Code or documentation!
