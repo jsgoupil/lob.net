@@ -27,6 +27,8 @@ namespace Lob.Net.Sample
             var postcards = new Postcards(container.GetService<ILobPostcards>());
             var bankAccounts = new BankAccounts(container.GetService<ILobBankAccounts>());
             var checks = new Checks(container.GetService<ILobChecks>());
+            var usVerifications = new UsVerifications(container.GetService<ILobUsVerifications>());
+            var intlVerifications = new IntlVerifications(container.GetService<ILobIntlVerifications>());
 
             Task.Run(async () =>
             {
@@ -35,6 +37,8 @@ namespace Lob.Net.Sample
                 await postcards.Run();
                 await bankAccounts.Run();
                 await checks.Run();
+                await usVerifications.Run();
+                await intlVerifications.Run();
             }).GetAwaiter().GetResult();
         }
     }

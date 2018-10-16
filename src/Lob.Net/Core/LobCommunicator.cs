@@ -52,18 +52,19 @@ namespace Lob.Net
             return await ProcessResponseAsync<T>(response);
         }
 
-        async Task<T> ILobCommunicator.PostAsync<T>(string url, object body, string idempotencyKey)
+        Task<T> ILobCommunicator.PostAsync<T>(string url, object body, string idempotencyKey)
         {
-            var obj = JsonConvert.SerializeObject(body, Formatting.None, serializerSettings);
-            var content = new StringContent(obj, Encoding.UTF8, "application/json");
-
-            if (!string.IsNullOrEmpty(idempotencyKey))
+            if (string.IsNullOrEmpty(idempotencyKey))
             {
-                content.Headers.TryAddWithoutValidation("Idempotency-Key", idempotencyKey);
+                return PostAsync<T>(url, body);
             }
 
-            var response = await client.PostAsync(url, content);
-            return await ProcessResponseAsync<T>(response);
+            return PostAsync<T>(url, body, (Name: "Idempotency-Key", Value: idempotencyKey));
+        }
+
+        Task<T> ILobCommunicator.PostAsync<T>(string url, object body, params (string Name, string Value)[] extraHeaders)
+        {
+            return PostAsync<T>(url, body, extraHeaders);
         }
 
         private async Task<T> ProcessResponseAsync<T>(HttpResponseMessage response)
@@ -94,6 +95,20 @@ namespace Lob.Net
             }
 
             return JsonConvert.DeserializeObject<T>(textResult, serializerSettings);
+        }
+
+        private async Task<T> PostAsync<T>(string url, object body, params (string Name, string Value)[] extraHeaders)
+        {
+            var obj = JsonConvert.SerializeObject(body, Formatting.None, serializerSettings);
+            var content = new StringContent(obj, Encoding.UTF8, "application/json");
+
+            foreach (var extraHeader in extraHeaders)
+            {
+                content.Headers.TryAddWithoutValidation(extraHeader.Name, extraHeader.Value);
+            }
+
+            var response = await client.PostAsync(url, content);
+            return await ProcessResponseAsync<T>(response);
         }
     }
 }
