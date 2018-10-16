@@ -155,6 +155,27 @@ public interface ILobAddresses
 }
 ```
 
+### US Verifications ###
+
+```C#
+public interface ILobUsVerifications
+{
+    Task<UsVerificationResponse> Verify(UsVerificationRequest request, UsVerificationCase @case = UsVerificationCase.Upper);
+    Task<UsAutocompletionResponse> Autocomplete(UsAutocompletionRequest request, string ipAddress = null);
+    Task<UsZipLookupResponse> ZipLookup(string zipCode);
+    Task<UsZipLookupResponse> ZipLookup(UsZipLookupRequest request);
+}
+```
+
+### Intl Verifications ###
+
+```C#
+public interface ILobIntlVerifications
+{
+    Task<IntlVerificationResponse> Verify(IntlVerificationRequest request);
+}
+```
+
 Follow the other examples in the sample folder.
 
 
