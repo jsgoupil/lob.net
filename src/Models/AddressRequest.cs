@@ -1,22 +1,22 @@
-﻿using Lob.Net.Helpers;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Lob.Net.Models
 {
-    [JsonConverter(typeof(AddressConverter))]
     public class AddressRequest
     {
-        public string AddressId { get; }
-        public Address AddressObject { get; }
-
-        public AddressRequest(string id)
-        {
-            AddressId = id;
-        }
-
-        public AddressRequest(Address address)
-        {
-            AddressObject = address;
-        }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string Company { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressState { get; set; }
+        public string AddressZip { get; set; }
+        public string AddressCountry { get; set; }
+        public IDictionary<string, string> Metadata { get; set; }
     }
 }

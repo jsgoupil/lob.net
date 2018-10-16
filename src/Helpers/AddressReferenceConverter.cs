@@ -5,20 +5,20 @@ using System;
 
 namespace Lob.Net.Helpers
 {
-    internal class AddressConverter : JsonConverter<AddressRequest>
+    internal class AddressReferenceConverter : JsonConverter<AddressReference>
     {
-        public override AddressRequest ReadJson(JsonReader reader, Type objectType, AddressRequest existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override AddressReference ReadJson(JsonReader reader, Type objectType, AddressReference existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             JObject jObject = JObject.Load(reader);
             switch (jObject.Type)
             {
                 case JTokenType.String:
-                    return new AddressRequest(jObject.Value<string>());
+                    return new AddressReference(jObject.Value<string>());
                 case JTokenType.Object:
-                    var obj = jObject.ToObject<Address>();
+                    var obj = jObject.ToObject<AddressRequest>();
                     if (obj != null)
                     {
-                        return new AddressRequest(obj);
+                        return new AddressReference(obj);
                     }
                     break;
             }
@@ -26,7 +26,7 @@ namespace Lob.Net.Helpers
             throw new Exception($"Can't read the object.");
         }
 
-        public override void WriteJson(JsonWriter writer, AddressRequest value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, AddressReference value, JsonSerializer serializer)
         {
             if (!string.IsNullOrEmpty(value.AddressId))
             {

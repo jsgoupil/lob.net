@@ -11,6 +11,7 @@ namespace Lob.Net
         {
             services
                 .AddSingleton<ILobCommunicator, LobCommunicator>()
+                .AddSingleton<ILobAddresses, LobAddresses>()
                 .AddSingleton<ILobBankAccounts, LobBankAccounts>()
                 .AddSingleton<ILobChecks, LobChecks>()
                 .AddSingleton<ILobLetters, LobLetters>()

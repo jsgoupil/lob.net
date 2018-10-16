@@ -37,8 +37,8 @@ namespace Lob.Net.Tests
             {
                 Amount = 100,
                 BankAccount = "bank_da4daf54431d39d",
-                From = new AddressRequest("adr_738379e5622a9f04"),
-                To = new AddressRequest(new Address
+                From = new AddressReference("adr_738379e5622a9f04"),
+                To = new AddressReference(new AddressRequest
                 {
                     AddressLine1 = "addr1",
                     AddressLine2 = "addr2",
@@ -119,7 +119,7 @@ namespace Lob.Net.Tests
             Assert.Equal(0, result.From.Metadata.Count);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateCreated.Value);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateModified.Value);
-            Assert.Null(result.From.Deleted);
+            Assert.False(result.From.Deleted);
             Assert.Equal("address", result.From.Object);
             Assert.Equal("adr_9570bceaa6968c3f", result.To.Id);
             Assert.Equal("MyDescription", result.To.Description);
@@ -176,7 +176,7 @@ namespace Lob.Net.Tests
         }
 
         [Fact]
-        public async Task CancelRequest()
+        public async Task DeleteRequest()
         {
             var serviceCollection = GetServiceProvider(mock =>
             {
@@ -187,7 +187,7 @@ namespace Lob.Net.Tests
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var checks = serviceProvider.GetService<ILobChecks>();
-            var result = await checks.CancelAsync("chk_d7613d3be349237b");
+            var result = await checks.DeleteAsync("chk_d7613d3be349237b");
 
             Assert.Equal("chk_d7613d3be349237b", result.Id);
             Assert.True(result.Deleted);

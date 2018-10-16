@@ -6,8 +6,8 @@ namespace Lob.Net.Models
     public class CheckRequest
     {
         public string Description { get; set; }
-        public AddressRequest To { get; set; }
-        public AddressRequest From { get; set; }
+        public AddressReference To { get; set; }
+        public AddressReference From { get; set; }
         public string BankAccount { get; set; }
         public decimal Amount { get; set; }
         public string Memo { get; set; }

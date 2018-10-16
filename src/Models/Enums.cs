@@ -52,4 +52,13 @@ namespace Lob.Net.Models
         Ascending,
         Descending
     }
+
+    public enum EventTypeResource
+    {
+        Postcards,
+        Letters,
+        Checks,
+        Addresses,
+        BankAccounts
+    }
 }

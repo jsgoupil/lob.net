@@ -5,9 +5,9 @@ namespace Lob.Net
 {
     public interface ILobChecks
     {
-        Task<CheckResponse> CreateAsync(CheckRequest letter, string idempotencyKey = null);
+        Task<CheckResponse> CreateAsync(CheckRequest check, string idempotencyKey = null);
         Task<CheckResponse> RetrieveAsync(string id);
-        Task<CancelResponse> CancelAsync(string id);
+        Task<DeleteResponse> DeleteAsync(string id);
         Task<ListResponse<CheckResponse>> ListAsync(CheckFilter filter = null);
     }
 }

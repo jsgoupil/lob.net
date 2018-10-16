@@ -102,7 +102,7 @@ namespace Lob.Net.Tests
         }
 
         [Fact]
-        public async Task CancelRequest()
+        public async Task DeleteRequest()
         {
             var serviceCollection = GetServiceProvider(mock =>
             {
@@ -113,7 +113,7 @@ namespace Lob.Net.Tests
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var bankAccounts = serviceProvider.GetService<ILobBankAccounts>();
-            var result = await bankAccounts.CancelAsync("bank_da4daf54431d39d");
+            var result = await bankAccounts.DeleteAsync("bank_da4daf54431d39d");
 
             Assert.Equal("bank_da4daf54431d39d", result.Id);
             Assert.True(result.Deleted);

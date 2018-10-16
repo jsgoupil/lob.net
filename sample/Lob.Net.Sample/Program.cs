@@ -22,6 +22,7 @@ namespace Lob.Net.Sample
 
             var container = services.BuildServiceProvider();
 
+            var addresses = new Addresses(container.GetService<ILobAddresses>());
             var letters = new Letters(container.GetService<ILobLetters>());
             var postcards = new Postcards(container.GetService<ILobPostcards>());
             var bankAccounts = new BankAccounts(container.GetService<ILobBankAccounts>());
@@ -29,6 +30,7 @@ namespace Lob.Net.Sample
 
             Task.Run(async () =>
             {
+                await addresses.Run();
                 await letters.Run();
                 await postcards.Run();
                 await bankAccounts.Run();

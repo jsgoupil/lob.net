@@ -68,7 +68,7 @@ public class PostcardsController : Controller
         {
             var result1 = await lobPostcards.CreateAsync(new PostcardRequest
             {
-                From = new AddressRequest(new Address
+                From = new AddressReference(new Address
                 {
                     Name = "Jean-Sébastien Goupil",
                     Company = "JSGoupil, LLC",
@@ -78,7 +78,7 @@ public class PostcardsController : Controller
                     AddressZip = "98103",
                     AddressCountry = "US"
                 }),
-                To = new AddressRequest("adr_738379e5622a9f04"), // Saved address in LOB
+                To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
                 Front = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
                 Back = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
                 MergeVariables = new Dictionary<string, string>
@@ -99,9 +99,9 @@ Postcards APIs:
 ```C#
 public interface ILobPostcards
 {
-    Task<PostcardResponse> CreateAsync(PostcardRequest letter);
+    Task<PostcardResponse> CreateAsync(PostcardRequest postcard, string idempotencyKey = null);
     Task<PostcardResponse> RetrieveAsync(string id);
-    Task<CancelResponse> CancelAsync(string id);
+    Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<PostcardResponse>> ListAsync(PostcardFilter filter = null);
 }
 ```
@@ -111,9 +111,9 @@ public interface ILobPostcards
 ```C#
 public interface ILobLetters
 {
-    Task<LetterResponse> CreateAsync(LetterRequest letter);
+    Task<LetterResponse> CreateAsync(LetterRequest letter, string idempotencyKey = null);
     Task<LetterResponse> RetrieveAsync(string id);
-    Task<CancelResponse> CancelAsync(string id);
+    Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<LetterResponse>> ListAsync(LetterFilter filter = null);
 }
 ```
@@ -123,10 +123,10 @@ public interface ILobLetters
 ```C#
 public interface ILobBankAccounts
 {
-    Task<BankAccountResponse> CreateAsync(BankAccountRequest letter);
+    Task<BankAccountResponse> CreateAsync(BankAccountRequest bankAccount, string idempotencyKey = null);
     Task<BankAccountResponse> RetrieveAsync(string id);
-    Task<CancelResponse> CancelAsync(string id);
-    Task<BankAccountResponse> VerifyAsync(string id, decimal amount1, decimal amount2);
+    Task<DeleteResponse> DeleteAsync(string id);
+    Task<BankAccountResponse> VerifyAsync(string id, int amountInCents1, int amountInCents2);
     Task<ListResponse<BankAccountResponse>> ListAsync(BankAccountFilter filter = null);
 }
 ```
@@ -136,9 +136,21 @@ public interface ILobBankAccounts
 ```C#
 public interface ILobChecks
 {
-    Task<CheckResponse> CreateAsync(CheckRequest letter);
+    Task<CheckResponse> CreateAsync(CheckRequest check, string idempotencyKey = null);
     Task<CheckResponse> RetrieveAsync(string id);
-    Task<CancelResponse> CancelAsync(string id);
+    Task<DeleteResponse> DeleteAsync(string id);
+    Task<ListResponse<CheckResponse>> ListAsync(CheckFilter filter = null);
+}
+```
+
+### Addresses ###
+
+```C#
+public interface ILobAddresses
+{
+    Task<CheckResponse> CreateAsync(CheckRequest check, string idempotencyKey = null);
+    Task<CheckResponse> RetrieveAsync(string id);
+    Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<CheckResponse>> ListAsync(CheckFilter filter = null);
 }
 ```

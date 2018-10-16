@@ -43,7 +43,7 @@ namespace Lob.Net.Tests
                 DoubleSided = true,
                 ExtraService = ExtraService.Certified,
                 File = "tmpl_7e7fdb7d1cb261d",
-                From = new AddressRequest("adr_738379e5622a9f04"),
+                From = new AddressReference("adr_738379e5622a9f04"),
                 MailType = MailType.UspsFirstClass,
                 MergeVariables = new Dictionary<string, string>
                 {
@@ -58,7 +58,7 @@ namespace Lob.Net.Tests
                 PerforatedPage = 3,
                 ReturnEnvelope = true,
                 SendDate = new DateTime(2019, 10, 10, 23, 0, 26, 998),
-                To = new AddressRequest(new Address
+                To = new AddressReference(new AddressRequest
                 {
                     AddressLine1 = "addr1",
                     AddressLine2 = "addr2",
@@ -104,7 +104,7 @@ namespace Lob.Net.Tests
             Assert.Equal(0, result.From.Metadata.Count);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateCreated.Value);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateModified.Value);
-            Assert.Null(result.From.Deleted);
+            Assert.False(result.From.Deleted);
             Assert.Equal("address", result.From.Object);
             Assert.Equal("adr_c66916085e130482", result.To.Id);
             Assert.Equal("MyDescription", result.To.Description);
@@ -164,7 +164,7 @@ namespace Lob.Net.Tests
         }
 
         [Fact]
-        public async Task CancelRequest()
+        public async Task DeleteRequest()
         {
             var serviceCollection = GetServiceProvider(mock =>
             {
@@ -175,7 +175,7 @@ namespace Lob.Net.Tests
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var letters = serviceProvider.GetService<ILobLetters>();
-            var result = await letters.CancelAsync("ltr_e69f2ee9de166ba7");
+            var result = await letters.DeleteAsync("ltr_e69f2ee9de166ba7");
 
             Assert.Equal("ltr_e69f2ee9de166ba7", result.Id);
             Assert.True(result.Deleted);

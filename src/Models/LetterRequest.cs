@@ -6,8 +6,8 @@ namespace Lob.Net.Models
     public class LetterRequest
     {
         public string Description { get; set; }
-        public AddressRequest To { get; set; }
-        public AddressRequest From { get; set; }
+        public AddressReference To { get; set; }
+        public AddressReference From { get; set; }
         public bool Color { get; set; }
         public string File { get; set; }
         public IDictionary<string, string> MergeVariables { get; set; }

@@ -11,8 +11,9 @@
     <Description>Wrapper for the Lob.com API. Sends snail mail with this .NET API.</Description>
     <Author>Jean-Sébastien Goupil</Author>
     <Authors>Jean-Sébastien Goupil</Authors>
+    <Title>Lob.Net - Snail Mail API</Title>
     <Copyright>Copyright © Jean-Sébastien Goupil 2018</Copyright>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>mail snailmail lob postage letter postcard check</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/jsgoupil/lob.net/master/LICENSE.md</PackageLicenseUrl>

@@ -37,7 +37,7 @@ namespace Lob.Net.Tests
             {
                 Back = "back",
                 Description = "My Description",
-                From = new AddressRequest("adr_738379e5622a9f04"),
+                From = new AddressReference("adr_738379e5622a9f04"),
                 Front = "front",
                 MailType = MailType.UspsFirstClass,
                 MergeVariables = new Dictionary<string, string>
@@ -52,7 +52,7 @@ namespace Lob.Net.Tests
                 },
                 SendDate = new DateTime(2019, 10, 10, 23, 0, 26, 998),
                 Size = "4x6",
-                To = new AddressRequest(new Address
+                To = new AddressReference(new AddressRequest
                 {
                     AddressLine1 = "addr1",
                     AddressLine2 = "addr2",
@@ -96,7 +96,7 @@ namespace Lob.Net.Tests
             Assert.Equal(0, result.From.Metadata.Count);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateCreated.Value);
             Assert.Equal(new DateTime(2018, 10, 9, 22, 14, 50, 639, DateTimeKind.Utc), result.From.DateModified.Value);
-            Assert.Null(result.From.Deleted);
+            Assert.False(result.From.Deleted);
             Assert.Equal("address", result.From.Object);
             Assert.Equal("tmpl_7e7fdb7d1cb261d", result.FrontTemplateId);
             Assert.Equal("vrsn_861e42dba614478", result.FrontTemplateVersionId);
@@ -153,7 +153,7 @@ namespace Lob.Net.Tests
         }
 
         [Fact]
-        public async Task CancelRequest()
+        public async Task DeleteRequest()
         {
             var serviceCollection = GetServiceProvider(mock =>
             {
@@ -164,7 +164,7 @@ namespace Lob.Net.Tests
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var postcards = serviceProvider.GetService<ILobPostcards>();
-            var result = await postcards.CancelAsync("psc_9abb3c02f56b331b");
+            var result = await postcards.DeleteAsync("psc_9abb3c02f56b331b");
 
             Assert.Equal("psc_9abb3c02f56b331b", result.Id);
             Assert.True(result.Deleted);

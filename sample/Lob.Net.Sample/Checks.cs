@@ -27,7 +27,7 @@ namespace Lob.Net.Sample
                 {
                     Amount = 100,
                     BankAccount = "bank_be392350a667a24", // Saved bank account in LOB
-                    From = new AddressRequest(new Address
+                    From = new AddressReference(new AddressRequest
                     {
                         Name = "Jean-Sébastien Goupil",
                         Company = "JSGoupil, LLC",
@@ -37,7 +37,7 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressRequest("adr_738379e5622a9f04"), // Saved address in LOB
+                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
                     Description = "Paying Employee"
                 });
 

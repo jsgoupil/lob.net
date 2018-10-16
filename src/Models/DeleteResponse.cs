@@ -1,6 +1,6 @@
 ﻿namespace Lob.Net.Models
 {
-    public class CancelResponse
+    public class DeleteResponse
     {
         public string Id { get; set; }
         public bool Deleted { get; set; }

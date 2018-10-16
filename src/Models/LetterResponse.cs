@@ -8,8 +8,8 @@ namespace Lob.Net.Models
         public string Id { get; set; }
         public string Description { get; set; }
         public IDictionary<string, string> Metadata { get; set; }
-        public Address To { get; set; }
-        public Address From { get; set; }
+        public AddressResponse To { get; set; }
+        public AddressResponse From { get; set; }
         public bool Color { get; set; }
         public bool DoubleSided { get; set; }
         public AddressPlacement AddressPlacement { get; set; }

@@ -24,7 +24,7 @@ namespace Lob.Net.Sample
             {
                 var result1 = await lobLetters.CreateAsync(new LetterRequest
                 {
-                    From = new AddressRequest(new Address
+                    From = new AddressReference(new AddressRequest
                     {
                         Name = "Jean-Sébastien Goupil",
                         Company = "JSGoupil, LLC",
@@ -34,7 +34,7 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressRequest("adr_738379e5622a9f04"), // Saved address in LOB
+                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
                     DoubleSided = true,
                     AddressPlacement = AddressPlacement.InsertBlankPage,
                     Color = true,

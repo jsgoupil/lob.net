@@ -17,8 +17,8 @@ namespace Lob.Net.Models
         public string AttachmentTemplateId { get; set; }
         public string CheckBottomTemplateVersionId { get; set; }
         public string AttachmentTemplateVersionId { get; set; }
-        public Address To { get; set; }
-        public Address From { get; set; }
+        public AddressResponse To { get; set; }
+        public AddressResponse From { get; set; }
         public BankAccountResponse BankAccount { get; set; }
         public Carrier Carrier { get; set; }
         public string TrackingNumber { get; set; }

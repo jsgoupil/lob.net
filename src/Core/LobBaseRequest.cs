@@ -29,9 +29,9 @@ namespace Lob.Net
             return lobCommunicator.GetAsync<ModelResponse>($"{url}/{id}");
         }
 
-        public Task<CancelResponse> CancelAsync(string id)
+        public Task<DeleteResponse> DeleteAsync(string id)
         {
-            return lobCommunicator.DeleteAsync<CancelResponse>($"{url}/{id}");
+            return lobCommunicator.DeleteAsync<DeleteResponse>($"{url}/{id}");
         }
 
         public async Task<ListResponse<ModelResponse>> ListAsync(ModelFilter filter = null)
