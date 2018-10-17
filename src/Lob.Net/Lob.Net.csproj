@@ -13,7 +13,7 @@
     <Authors>Jean-Sébastien Goupil</Authors>
     <Title>Lob.Net - Snail Mail API</Title>
     <Copyright>Copyright © Jean-Sébastien Goupil 2018</Copyright>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>mail snailmail lob postage letter postcard check</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/jsgoupil/lob.net/master/LICENSE.md</PackageLicenseUrl>
