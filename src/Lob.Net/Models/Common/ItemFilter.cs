@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lob.Net.Models
 {
-    abstract public class ItemFilter : BaseFilter
+    abstract public class ItemFilter : BaseFilterWithMetadata
     {
         public bool? Scheduled { get; set; }
         public DateTime? SendAfter { get; set; }

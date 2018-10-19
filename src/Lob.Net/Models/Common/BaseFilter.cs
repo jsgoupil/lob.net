@@ -9,7 +9,6 @@ namespace Lob.Net.Models
         public int? Offset { get; set; }
         public int? Limit { get; set; }
         public bool IncludeTotalCount { get; set; }
-        public IDictionary<string, string> Metadata { get; set; }
         public DateTime? CreatedAfter { get; set; }
         public DateTime? CreatedBefore { get; set; }
 
@@ -29,14 +28,6 @@ namespace Lob.Net.Models
             if (IncludeTotalCount)
             {
                 dict["include[]"] = "total_count";
-            }
-
-            if (Metadata?.Keys.Count > 0)
-            {
-                foreach (var kvp in Metadata)
-                {
-                    dict[$"metadata[{kvp.Key}]"] = kvp.Value;
-                }
             }
 
             if (CreatedAfter.HasValue || CreatedBefore.HasValue)

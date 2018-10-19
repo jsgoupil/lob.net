@@ -1,6 +1,6 @@
 ﻿namespace Lob.Net.Models
 {
-    public class BankAccountFilter : BaseFilter
+    public class BankAccountFilter : BaseFilterWithMetadata
     {
     }
 }

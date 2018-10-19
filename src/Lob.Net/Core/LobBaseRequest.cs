@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Lob.Net
 {
     internal class LobBaseRequest<ModelRequest, ModelResponse, ModelFilter>
-        where ModelFilter : BaseFilter
+        where ModelFilter : BaseFilterWithMetadata
     {
         protected ILobCommunicator lobCommunicator;
         protected readonly string url;

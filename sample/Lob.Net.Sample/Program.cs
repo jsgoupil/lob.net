@@ -29,6 +29,7 @@ namespace Lob.Net.Sample
             var checks = new Checks(container.GetService<ILobChecks>());
             var usVerifications = new UsVerifications(container.GetService<ILobUsVerifications>());
             var intlVerifications = new IntlVerifications(container.GetService<ILobIntlVerifications>());
+            var templates = new Templates(container.GetService<ILobTemplates>());
 
             Task.Run(async () =>
             {
@@ -39,6 +40,7 @@ namespace Lob.Net.Sample
                 await checks.Run();
                 await usVerifications.Run();
                 await intlVerifications.Run();
+                await templates.Run();
             }).GetAwaiter().GetResult();
         }
     }

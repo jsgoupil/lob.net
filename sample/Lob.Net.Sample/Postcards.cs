@@ -2,6 +2,7 @@
 using Lob.Net.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Lob.Net.Sample
@@ -21,10 +22,9 @@ namespace Lob.Net.Sample
         {
             try
             {
-                /*
                 var result1 = await lobPostcards.CreateAsync(new PostcardRequest
                 {
-                    From = new AddressRequest(new Address
+                    From = new AddressReference(new AddressRequest
                     {
                         Name = "Jean-Sébastien Goupil",
                         Company = "JSGoupil, LLC",
@@ -34,7 +34,7 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressRequest("adr_738379e5622a9f04"), // Saved address in LOB
+                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
                     Front = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
                     Back = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
                     MergeVariables = new Dictionary<string, string>
@@ -45,7 +45,7 @@ namespace Lob.Net.Sample
 
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
-                */
+
                 var result2 = await lobPostcards.ListAsync(new PostcardFilter
                 {
                     Limit = 1

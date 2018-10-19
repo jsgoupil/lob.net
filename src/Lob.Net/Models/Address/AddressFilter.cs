@@ -1,6 +1,6 @@
 ﻿namespace Lob.Net.Models
 {
-    public class AddressFilter : BaseFilter
+    public class AddressFilter : BaseFilterWithMetadata
     {
     }
 }

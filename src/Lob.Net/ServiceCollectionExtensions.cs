@@ -18,6 +18,7 @@ namespace Lob.Net
                 .AddSingleton<ILobPostcards, LobPostcards>()
                 .AddSingleton<ILobUsVerifications, LobUsVerifications>()
                 .AddSingleton<ILobIntlVerifications, LobIntlVerifications>()
+                .AddSingleton<ILobTemplates, LobTemplates>()
                 .AddSingleton<LobSerializerSettings>()
                 .AddHttpClient(CoreValues.HTTP_CLIENT_NAME);
 
