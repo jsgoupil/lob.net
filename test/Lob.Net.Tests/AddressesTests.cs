@@ -134,7 +134,7 @@ namespace Lob.Net.Tests
             {
                 mock.When(HttpMethod.Get, "https://api.lob.com/v1/addresses")
                     .WithExactQueryString("offset=0&limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
-                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"adr_b8cf174eda20c810\",\n            \"description\": \"MyDescription\",\n            \"name\": \"MYNAME\",\n            \"company\": \"MYCOMPANY\",\n            \"phone\": \"2065551234\",\n            \"email\": \"contact@jsgoupil.com\",\n            \"address_line1\": \"ADDR1\",\n            \"address_line2\": \"ADDR2\",\n            \"address_city\": \"CITY1\",\n            \"address_state\": \"WA\",\n            \"address_zip\": \"98103\",\n            \"address_country\": \"UNITED STATES\",\n            \"metadata\": {\n                \"m1\": \"v1\",\n                \"m2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-16T01:26:50.323Z\",\n            \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n            \"object\": \"address\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\"\n}");
+                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"adr_b8cf174eda20c810\",\n            \"description\": \"MyDescription\",\n            \"name\": \"MYNAME\",\n            \"company\": \"MYCOMPANY\",\n            \"phone\": \"2065551234\",\n            \"email\": \"contact@jsgoupil.com\",\n            \"address_line1\": \"ADDR1\",\n            \"address_line2\": \"ADDR2\",\n            \"address_city\": \"CITY1\",\n            \"address_state\": \"WA\",\n            \"address_zip\": \"98103\",\n            \"address_country\": \"UNITED STATES\",\n            \"metadata\": {\n                \"m1\": \"v1\",\n                \"m2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-16T01:26:50.323Z\",\n            \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n            \"object\": \"address\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\",\n    \"total_count\": 1\n}");
                 mock.Fallback.Throw(new Exception("Fallback"));
             });
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -155,6 +155,7 @@ namespace Lob.Net.Tests
             });
 
             Assert.Equal(1, result.Count);
+            Assert.Equal(1, result.TotalCount);
             Assert.Equal("list", result.Object);
             Assert.Single(result.Data);
             Assert.NotNull(result.Data[0]);
