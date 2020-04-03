@@ -24,7 +24,7 @@ namespace Lob.Net.Tests
             {
                 mock.When(HttpMethod.Post, "https://api.lob.com/v1/bank_accounts")
                     .WithHeaders("Accept", "application/json")
-                    .WithHeaders("Lob-Version", "2018-06-05")
+                    .WithHeaders("Lob-Version", "2020-02-11")
                     .WithHeaders("Authorization", "Basic S2V5Og==")
                     .WithContent("{\"description\":\"My Personal Account\",\"routing_number\":\"322271627\",\"account_number\":\"123456789\",\"account_type\":\"individual\",\"signatory\":\"Jean-Sébastien Goupil\",\"metadata\":{\"met1\":\"v1\",\"met2\":\"v2\"}}")
                     .Respond("application/json", "{\n    \"id\": \"bank_da4daf54431d39d\",\n    \"description\": \"My Personal Account\",\n    \"metadata\": {\n        \"met1\": \"v1\",\n        \"met2\": \"v2\"\n    },\n    \"routing_number\": \"322271627\",\n    \"account_number\": \"123456789\",\n    \"account_type\": \"individual\",\n    \"signatory\": \"Jean-Sébastien Goupil\",\n    \"signature_url\": null,\n    \"bank_name\": \"J.P. MORGAN CHASE BANK, N.A.\",\n    \"verified\": false,\n    \"date_created\": \"2018-10-11T19:39:32.184Z\",\n    \"date_modified\": \"2018-10-11T19:39:32.184Z\",\n    \"object\": \"bank_account\"\n}");
@@ -142,8 +142,8 @@ namespace Lob.Net.Tests
             var serviceCollection = GetServiceProvider(mock =>
             {
                 mock.When(HttpMethod.Get, "https://api.lob.com/v1/bank_accounts")
-                    .WithExactQueryString("offset=0&limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
-                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"bank_da4daf54431d39d\",\n            \"description\": \"My Personal Account\",\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"routing_number\": \"322271627\",\n            \"account_number\": \"123456789\",\n            \"account_type\": \"individual\",\n            \"signatory\": \"Jean-Sébastien Goupil\",\n            \"signature_url\": null,\n            \"bank_name\": \"J.P. MORGAN CHASE BANK, N.A.\",\n            \"verified\": false,\n            \"date_created\": \"2018-10-11T19:39:32.184Z\",\n            \"date_modified\": \"2018-10-11T19:39:32.184Z\",\n            \"object\": \"bank_account\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\"\n}");
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"bank_da4daf54431d39d\",\n            \"description\": \"My Personal Account\",\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"routing_number\": \"322271627\",\n            \"account_number\": \"123456789\",\n            \"account_type\": \"individual\",\n            \"signatory\": \"Jean-Sébastien Goupil\",\n            \"signature_url\": null,\n            \"bank_name\": \"J.P. MORGAN CHASE BANK, N.A.\",\n            \"verified\": false,\n            \"date_created\": \"2018-10-11T19:39:32.184Z\",\n            \"date_modified\": \"2018-10-11T19:39:32.184Z\",\n            \"object\": \"bank_account\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
                 mock.Fallback.Throw(new Exception("Fallback"));
             });
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -155,7 +155,6 @@ namespace Lob.Net.Tests
                 CreatedBefore = new DateTime(2017, 1, 1),
                 IncludeTotalCount = true,
                 Limit = 100,
-                Offset = 0,
                 Metadata = new Dictionary<string, string>
                 {
                     { "m1", "v1" },
@@ -164,9 +163,45 @@ namespace Lob.Net.Tests
             });
 
             Assert.Equal(1, result.Count);
+            Assert.Equal(1, result.TotalCount);
             Assert.Equal("list", result.Object);
             Assert.Single(result.Data);
             Assert.NotNull(result.Data[0]);
+        }
+
+        [Fact]
+        public async Task ListObjectsRequest()
+        {
+            var serviceCollection = GetServiceProvider(mock =>
+            {
+                mock.When(HttpMethod.Get, "https://api.lob.com/v1/bank_accounts")
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"bank_da4daf54431d39d\",\n            \"description\": \"My Personal Account\",\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"routing_number\": \"322271627\",\n            \"account_number\": \"123456789\",\n            \"account_type\": \"individual\",\n            \"signatory\": \"Jean-Sébastien Goupil\",\n            \"signature_url\": null,\n            \"bank_name\": \"J.P. MORGAN CHASE BANK, N.A.\",\n            \"verified\": false,\n            \"date_created\": \"2018-10-11T19:39:32.184Z\",\n            \"date_modified\": \"2018-10-11T19:39:32.184Z\",\n            \"object\": \"bank_account\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
+                mock.Fallback.Throw(new Exception("Fallback"));
+            });
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var bankAccounts = serviceProvider.GetService<ILobBankAccounts>();
+            var enumerable = bankAccounts.ListObjectsAsync(new BankAccountFilter
+            {
+                CreatedAfter = new DateTime(2015, 12, 12),
+                CreatedBefore = new DateTime(2017, 1, 1),
+                IncludeTotalCount = true,
+                Limit = 100,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "m1", "v1" },
+                    { "m2", "v2" }
+                }
+            });
+            var list = new List<BankAccountResponse>();
+            await foreach (var data in enumerable)
+            {
+                list.Add(data);
+            }
+
+            Assert.Single(list);
+            Assert.NotNull(list[0]);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Lob.Net.Sample
         {
             try
             {
-                var result1 = await lobIntlVerifications.Verify(new IntlVerificationRequest
+                var result1 = await lobIntlVerifications.VerifyAsync(new IntlVerificationRequest
                 {
                     City = "Summerside",
                     Country = "CA",

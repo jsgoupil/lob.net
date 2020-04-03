@@ -5,6 +5,9 @@ namespace Lob.Net
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddLob(this IServiceCollection services)
+            => services.AddLob(null);
+
         public static IServiceCollection AddLob(this IServiceCollection services,
             Action<LobOptions> setupAction
         )

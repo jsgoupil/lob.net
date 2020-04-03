@@ -103,6 +103,9 @@ public interface ILobPostcards
     Task<PostcardResponse> RetrieveAsync(string id);
     Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<PostcardResponse>> ListAsync(PostcardFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<PostcardResponse> ListObjectsAsync(PostcardFilter filter = null);
 }
 ```
 
@@ -115,6 +118,9 @@ public interface ILobLetters
     Task<LetterResponse> RetrieveAsync(string id);
     Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<LetterResponse>> ListAsync(LetterFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<LetterResponse> ListObjectsAsync(LetterFilter filter = null);
 }
 ```
 
@@ -128,6 +134,9 @@ public interface ILobBankAccounts
     Task<DeleteResponse> DeleteAsync(string id);
     Task<BankAccountResponse> VerifyAsync(string id, int amountInCents1, int amountInCents2);
     Task<ListResponse<BankAccountResponse>> ListAsync(BankAccountFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<BankAccountResponse> ListObjectsAsync(BankAccountFilter filter = null);
 }
 ```
 
@@ -140,6 +149,9 @@ public interface ILobChecks
     Task<CheckResponse> RetrieveAsync(string id);
     Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<CheckResponse>> ListAsync(CheckFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<CheckResponse> ListObjectsAsync(CheckFilter filter = null);
 }
 ```
 
@@ -152,6 +164,9 @@ public interface ILobAddresses
     Task<CheckResponse> RetrieveAsync(string id);
     Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<CheckResponse>> ListAsync(CheckFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<CheckResponse> ListObjectsAsync(CheckFilter filter = null);
 }
 ```
 
@@ -166,11 +181,17 @@ public interface ILobTemplates
     Task<DeleteResponse> DeleteAsync(string id);
     Task<ListResponse<TemplateResponse>> ListAsync(TemplateFilter filter = null);
 
+    // For .NET Standard 2.1
+    IAsyncEnumerable<TemplateResponse> ListObjectsAsync(TemplateFilter filter = null);
+
     Task<TemplateVersionResponse> CreateVersionAsync(string templateId, TemplateVersionRequest templateVersion, string idempotencyKey = null);
     Task<TemplateVersionResponse> RetrieveVersionAsync(string templateId, string versionId);
     Task<TemplateVersionResponse> UpdateVersionAsync(string templateId, string versionId, string description);
     Task<DeleteResponse> DeleteVersionAsync(string templateId, string versionId);
     Task<ListResponse<TemplateVersionResponse>> ListVersionAsync(string templateId, TemplateVersionFilter filter = null);
+
+    // For .NET Standard 2.1
+    IAsyncEnumerable<TemplateVersionResponse> ListVersionObjectsAsync(string templateId, TemplateVersionFilter filter = null);
 }
 ```
 
@@ -179,10 +200,10 @@ public interface ILobTemplates
 ```C#
 public interface ILobUsVerifications
 {
-    Task<UsVerificationResponse> Verify(UsVerificationRequest request, UsVerificationCase @case = UsVerificationCase.Upper);
-    Task<UsAutocompletionResponse> Autocomplete(UsAutocompletionRequest request, string ipAddress = null);
-    Task<UsZipLookupResponse> ZipLookup(string zipCode);
-    Task<UsZipLookupResponse> ZipLookup(UsZipLookupRequest request);
+    Task<UsVerificationResponse> VerifyAsync(UsVerificationRequest request, UsVerificationCase @case = UsVerificationCase.Upper);
+    Task<UsAutocompletionResponse> AutocompleteAsync(UsAutocompletionRequest request, string ipAddress = null);
+    Task<UsZipLookupResponse> ZipLookupAsync(string zipCode);
+    Task<UsZipLookupResponse> ZipLookupAsync(UsZipLookupRequest request);
 }
 ```
 
@@ -191,14 +212,14 @@ public interface ILobUsVerifications
 ```C#
 public interface ILobIntlVerifications
 {
-    Task<IntlVerificationResponse> Verify(IntlVerificationRequest request);
+    Task<IntlVerificationResponse> VerifyAsync(IntlVerificationRequest request);
 }
 ```
 
 Follow the other examples in the sample folder.
 
 
-### WebHooks ###
+### WebHooks .NET Core 2 ###
 You need to install this NuGet package:
 
 ```
@@ -238,7 +259,7 @@ public class ExternalsController : Controller
     public IActionResult LobObject([FromBody] Lob.Net.Models.LobEvent evt)
     {
         // If you accept any type, use the non-generic version.
-        if (evt.EventType.Resource == EventTypeResource.Postcards)
+        if (evt.EventType.Resource == Lob.Net.Models.EventTypeResource.Postcards)
         {
             var postcardEvent = evt.ToPostcard();
         }
@@ -247,6 +268,9 @@ public class ExternalsController : Controller
     }
 }
 ```
+
+### WebHooks .NET Core 3 ###
+Not supported. Contribution welcome. To make it work with System.Text.Json
 
 ## Contributing
 

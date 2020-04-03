@@ -34,9 +34,9 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
-                    Front = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
-                    Back = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
+                    To = new AddressReference("adr_9162050afe1ffe96"), // Saved address in LOB
+                    Front = "tmpl_c65f6b82cddb8ab", // Saved template in LOB
+                    Back = "tmpl_c65f6b82cddb8ab", // Saved template in LOB
                     MergeVariables = new Dictionary<string, string>
                     {
                         {"variable_name", "Jean-Sébastien" }
@@ -46,11 +46,14 @@ namespace Lob.Net.Sample
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
 
-                var result2 = await lobPostcards.ListAsync(new PostcardFilter
+                var enumerable = lobPostcards.ListObjectsAsync(new PostcardFilter
                 {
                     Limit = 1
                 });
-                
+                var enumerator = enumerable.GetAsyncEnumerator();
+                await enumerator.MoveNextAsync();
+                var result2 = enumerator.Current;
+
                 var str2 = JsonConvert.SerializeObject(result2);
                 Console.WriteLine(str2);
             }

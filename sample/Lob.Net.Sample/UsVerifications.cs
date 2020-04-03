@@ -21,12 +21,12 @@ namespace Lob.Net.Sample
         {
             try
             {
-                var result1 = await lobUsVerifications.Verify(new UsVerificationRequest("residential house"));
+                var result1 = await lobUsVerifications.VerifyAsync(new UsVerificationRequest("residential house"));
 
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
 
-                var result2 = await lobUsVerifications.Autocomplete(new UsAutocompletionRequest
+                var result2 = await lobUsVerifications.AutocompleteAsync(new UsAutocompletionRequest
                 {
                     AddressPrefix = "5 su"
                 });
@@ -34,7 +34,7 @@ namespace Lob.Net.Sample
                 var str2 = JsonConvert.SerializeObject(result2);
                 Console.WriteLine(str2);
 
-                var result3 = await lobUsVerifications.ZipLookup(new UsZipLookupRequest
+                var result3 = await lobUsVerifications.ZipLookupAsync(new UsZipLookupRequest
                 {
                     ZipCode = "94133"
                 });

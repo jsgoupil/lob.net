@@ -53,7 +53,10 @@ namespace Lob.Net.Sample
                 var str4 = JsonConvert.SerializeObject(result4);
                 Console.WriteLine(str4);
 
-                var result5 = await lobTemplates.ListAsync();
+                var enumerable = lobTemplates.ListObjectsAsync();
+                var enumerator = enumerable.GetAsyncEnumerator();
+                await enumerator.MoveNextAsync();
+                var result5 = enumerator.Current;
 
                 var str5 = JsonConvert.SerializeObject(result5);
                 Console.WriteLine(str5);

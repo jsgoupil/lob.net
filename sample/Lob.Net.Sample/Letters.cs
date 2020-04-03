@@ -34,11 +34,11 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
+                    To = new AddressReference("adr_9162050afe1ffe96"), // Saved address in LOB
                     DoubleSided = true,
                     AddressPlacement = AddressPlacement.InsertBlankPage,
                     Color = true,
-                    File = "tmpl_7e7fdb7d1cb261d", // Saved template in LOB
+                    File = "tmpl_c65f6b82cddb8ab", // Saved template in LOB
                     MergeVariables = new Dictionary<string, string>
                     {
                         {"variable_name", "Jean-Sébastien" }
@@ -48,7 +48,10 @@ namespace Lob.Net.Sample
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
 
-                var result2 = await lobLetters.ListAsync();
+                var enumerable = lobLetters.ListObjectsAsync();
+                var enumerator = enumerable.GetAsyncEnumerator();
+                await enumerator.MoveNextAsync();
+                var result2 = enumerator.Current;
 
                 var str2 = JsonConvert.SerializeObject(result2);
                 Console.WriteLine(str2);

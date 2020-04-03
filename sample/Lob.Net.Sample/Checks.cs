@@ -21,12 +21,10 @@ namespace Lob.Net.Sample
         {
             try
             {
-
-
                 var result1 = await lobChecks.CreateAsync(new CheckRequest
                 {
                     Amount = 100,
-                    BankAccount = "bank_be392350a667a24", // Saved bank account in LOB
+                    BankAccount = "bank_d435285869e56e0", // Saved bank account in LOB
                     From = new AddressReference(new AddressRequest
                     {
                         Name = "Jean-Sébastien Goupil",
@@ -37,14 +35,17 @@ namespace Lob.Net.Sample
                         AddressZip = "98103",
                         AddressCountry = "US"
                     }),
-                    To = new AddressReference("adr_738379e5622a9f04"), // Saved address in LOB
+                    To = new AddressReference("adr_9162050afe1ffe96"), // Saved address in LOB
                     Description = "Paying Employee"
                 });
 
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
 
-                var result2 = await lobChecks.ListAsync();
+                var enumerable = lobChecks.ListObjectsAsync();
+                var enumerator = enumerable.GetAsyncEnumerator();
+                await enumerator.MoveNextAsync();
+                var result2 = enumerator.Current;
 
                 var str2 = JsonConvert.SerializeObject(result2);
                 Console.WriteLine(str2);

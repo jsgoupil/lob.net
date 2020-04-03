@@ -2,7 +2,7 @@
 
 namespace Lob.Net
 {
-    internal class LobChecks : LobBaseRequest<CheckRequest, CheckResponse, CheckFilter>, ILobChecks
+    public class LobChecks : LobBaseRequest<CheckRequest, CheckResponse, CheckFilter>, ILobChecks
     {
         private const string URL = "/v1/checks";
 

@@ -6,7 +6,6 @@ namespace Lob.Net.Models
 {
     abstract public class BaseFilter
     {
-        public int? Offset { get; set; }
         public int? Limit { get; set; }
         public bool IncludeTotalCount { get; set; }
         public DateTime? CreatedAfter { get; set; }
@@ -15,11 +14,6 @@ namespace Lob.Net.Models
         internal virtual IDictionary<string, string> GetFilterDictionary()
         {
             var dict = new Dictionary<string, string>();
-            if (Offset.HasValue)
-            {
-                dict["offset"] = Offset.Value.ToString();
-            }
-
             if (Limit.HasValue)
             {
                 dict["limit"] = Limit.Value.ToString();

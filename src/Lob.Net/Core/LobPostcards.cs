@@ -2,7 +2,7 @@
 
 namespace Lob.Net
 {
-    internal class LobPostcards : LobBaseRequest<PostcardRequest, PostcardResponse, PostcardFilter>, ILobPostcards
+    public class LobPostcards : LobBaseRequest<PostcardRequest, PostcardResponse, PostcardFilter>, ILobPostcards
     {
         private const string URL = "/v1/postcards";
 

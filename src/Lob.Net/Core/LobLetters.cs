@@ -2,7 +2,7 @@
 
 namespace Lob.Net
 {
-    internal class LobLetters : LobBaseRequest<LetterRequest, LetterResponse, LetterFilter>, ILobLetters
+    public class LobLetters : LobBaseRequest<LetterRequest, LetterResponse, LetterFilter>, ILobLetters
     {
         private const string URL = "/v1/letters";
 

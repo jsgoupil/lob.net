@@ -33,7 +33,10 @@ namespace Lob.Net.Sample
                 var str1 = JsonConvert.SerializeObject(result1);
                 Console.WriteLine(str1);
 
-                var result2 = await lobBankAccounts.ListAsync();
+                var enumerable = lobBankAccounts.ListObjectsAsync();
+                var enumerator = enumerable.GetAsyncEnumerator();
+                await enumerator.MoveNextAsync();
+                var result2 = enumerator.Current;
 
                 var str2 = JsonConvert.SerializeObject(result2);
                 Console.WriteLine(str2);

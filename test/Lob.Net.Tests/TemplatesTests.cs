@@ -25,7 +25,7 @@ namespace Lob.Net.Tests
             {
                 mock.When(HttpMethod.Post, "https://api.lob.com/v1/templates")
                     .WithHeaders("Accept", "application/json")
-                    .WithHeaders("Lob-Version", "2018-06-05")
+                    .WithHeaders("Lob-Version", "2020-02-11")
                     .WithHeaders("Authorization", "Basic S2V5Og==")
                     .WithContent("{\"description\":\"My Description\",\"html\":\"<html>hello\",\"metadata\":{\"met1\":\"v1\",\"met2\":\"v2\"}}")
                     .Respond("application/json", "{\n    \"id\": \"tmpl_ffa2eff0666dd83\",\n    \"description\": \"My Description\",\n    \"versions\": [\n        {\n            \"id\": \"vrsn_de41850f9642eb1\",\n            \"description\": \"My Description\",\n            \"html\": \"<html>hello\",\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"version\"\n        }\n    ],\n    \"published_version\": {\n        \"id\": \"vrsn_de41850f9642eb1\",\n        \"description\": \"My Description\",\n        \"html\": \"<html>hello\",\n        \"date_created\": \"2018-10-19T18:43:32.396Z\",\n        \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n        \"object\": \"version\"\n    },\n    \"metadata\": {\n        \"met1\": \"v1\",\n        \"met2\": \"v2\"\n    },\n    \"date_created\": \"2018-10-19T18:43:32.396Z\",\n    \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n    \"object\": \"template\"\n}");
@@ -152,8 +152,8 @@ namespace Lob.Net.Tests
             var serviceCollection = GetServiceProvider(mock =>
             {
                 mock.When(HttpMethod.Get, "https://api.lob.com/v1/templates")
-                    .WithExactQueryString("offset=0&limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2")
-                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"tmpl_ffa2eff0666dd83\",\n            \"description\": \"My Description\",\n            \"versions\": [\n                {\n                    \"id\": \"vrsn_de41850f9642eb1\",\n                    \"description\": \"My Description\",\n                    \"html\": \"<html>hello\",\n                    \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                    \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                    \"object\": \"version\"\n                }\n            ],\n            \"published_version\": {\n                \"id\": \"vrsn_de41850f9642eb1\",\n                \"description\": \"My Description\",\n                \"html\": \"<html>hello\",\n                \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                \"object\": \"version\"\n            },\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"template\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\",\n    \"total_count\": 1\n}");
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"tmpl_ffa2eff0666dd83\",\n            \"description\": \"My Description\",\n            \"versions\": [\n                {\n                    \"id\": \"vrsn_de41850f9642eb1\",\n                    \"description\": \"My Description\",\n                    \"html\": \"<html>hello\",\n                    \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                    \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                    \"object\": \"version\"\n                }\n            ],\n            \"published_version\": {\n                \"id\": \"vrsn_de41850f9642eb1\",\n                \"description\": \"My Description\",\n                \"html\": \"<html>hello\",\n                \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                \"object\": \"version\"\n            },\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"template\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
                 mock.Fallback.Throw(new Exception("Fallback"));
             });
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -165,7 +165,6 @@ namespace Lob.Net.Tests
                 CreatedBefore = new DateTime(2017, 1, 1),
                 IncludeTotalCount = true,
                 Limit = 100,
-                Offset = 0,
                 Metadata = new Dictionary<string, string>
                 {
                     { "m1", "v1" },
@@ -179,6 +178,41 @@ namespace Lob.Net.Tests
             Assert.Single(result.Data);
             Assert.NotNull(result.Data[0]);
         }
+
+        [Fact]
+        public async Task ListObjectsRequest()
+        {
+            var serviceCollection = GetServiceProvider(mock =>
+            {
+                mock.When(HttpMethod.Get, "https://api.lob.com/v1/templates")
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"tmpl_ffa2eff0666dd83\",\n            \"description\": \"My Description\",\n            \"versions\": [\n                {\n                    \"id\": \"vrsn_de41850f9642eb1\",\n                    \"description\": \"My Description\",\n                    \"html\": \"<html>hello\",\n                    \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                    \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                    \"object\": \"version\"\n                }\n            ],\n            \"published_version\": {\n                \"id\": \"vrsn_de41850f9642eb1\",\n                \"description\": \"My Description\",\n                \"html\": \"<html>hello\",\n                \"date_created\": \"2018-10-19T18:43:32.396Z\",\n                \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n                \"object\": \"version\"\n            },\n            \"metadata\": {\n                \"met1\": \"v1\",\n                \"met2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"template\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
+                mock.Fallback.Throw(new Exception("Fallback"));
+            });
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var templates = serviceProvider.GetService<ILobTemplates>();
+            var enumerable = templates.ListObjectsAsync(new TemplateFilter
+            {
+                CreatedAfter = new DateTime(2015, 12, 12),
+                CreatedBefore = new DateTime(2017, 1, 1),
+                IncludeTotalCount = true,
+                Limit = 100,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "m1", "v1" },
+                    { "m2", "v2" }
+                }
+            });
+            var list = new List<TemplateResponse>();
+            await foreach (var data in enumerable)
+            {
+                list.Add(data);
+            }
+
+            Assert.Single(list);
+            Assert.NotNull(list[0]);
+        }
         #endregion
 
 
@@ -190,7 +224,7 @@ namespace Lob.Net.Tests
             {
                 mock.When(HttpMethod.Post, "https://api.lob.com/v1/templates/tmpl_ffa2eff0666dd83/versions")
                     .WithHeaders("Accept", "application/json")
-                    .WithHeaders("Lob-Version", "2018-06-05")
+                    .WithHeaders("Lob-Version", "2020-02-11")
                     .WithHeaders("Authorization", "Basic S2V5Og==")
                     .WithContent("{\"description\":\"My Description\",\"html\":\"<html>hello\"}")
                     .Respond("application/json", "{\n    \"id\": \"vrsn_815de35fef403f8\",\n    \"description\": \"My Description\",\n    \"html\": \"<html>hello\",\n    \"date_created\": \"2018-10-19T19:06:30.847Z\",\n    \"date_modified\": \"2018-10-19T19:06:30.847Z\",\n    \"object\": \"version\"\n}");
@@ -291,8 +325,8 @@ namespace Lob.Net.Tests
             var serviceCollection = GetServiceProvider(mock =>
             {
                 mock.When(HttpMethod.Get, "https://api.lob.com/v1/templates/tmpl_ffa2eff0666dd83/versions")
-                    .WithExactQueryString("offset=0&limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
-                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"vrsn_de41850f9642eb1\",\n            \"description\": \"My Description\",\n            \"html\": \"<html>hello\",\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"version\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\",\n    \"total_count\": 1\n}");
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"vrsn_de41850f9642eb1\",\n            \"description\": \"My Description\",\n            \"html\": \"<html>hello\",\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"version\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": 1,\n    \"total_count\": 1\n}");
                 mock.Fallback.Throw(new Exception("Fallback"));
             });
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -303,8 +337,7 @@ namespace Lob.Net.Tests
                 CreatedAfter = new DateTime(2015, 12, 12),
                 CreatedBefore = new DateTime(2017, 1, 1),
                 IncludeTotalCount = true,
-                Limit = 100,
-                Offset = 0
+                Limit = 100
             });
 
             Assert.Equal(1, result.Count);
@@ -312,6 +345,36 @@ namespace Lob.Net.Tests
             Assert.Equal("list", result.Object);
             Assert.Single(result.Data);
             Assert.NotNull(result.Data[0]);
+        }
+
+        [Fact]
+        public async Task ListVersionObjectsRequest()
+        {
+            var serviceCollection = GetServiceProvider(mock =>
+            {
+                mock.When(HttpMethod.Get, "https://api.lob.com/v1/templates/tmpl_ffa2eff0666dd83/versions")
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"vrsn_de41850f9642eb1\",\n            \"description\": \"My Description\",\n            \"html\": \"<html>hello\",\n            \"date_created\": \"2018-10-19T18:43:32.396Z\",\n            \"date_modified\": \"2018-10-19T18:43:32.396Z\",\n            \"object\": \"version\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": 1,\n    \"total_count\": 1\n}");
+                mock.Fallback.Throw(new Exception("Fallback"));
+            });
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var templates = serviceProvider.GetService<ILobTemplates>();
+            var enumerable = templates.ListVersionObjectsAsync("tmpl_ffa2eff0666dd83", new TemplateVersionFilter
+            {
+                CreatedAfter = new DateTime(2015, 12, 12),
+                CreatedBefore = new DateTime(2017, 1, 1),
+                IncludeTotalCount = true,
+                Limit = 100
+            });
+            var list = new List<TemplateVersionResponse>();
+            await foreach (var data in enumerable)
+            {
+                list.Add(data);
+            }
+
+            Assert.Single(list);
+            Assert.NotNull(list[0]);
         }
         #endregion
     }

@@ -1,9 +1,10 @@
 ﻿using Lob.Net.Models;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lob.Net
 {
-    internal class LobBankAccounts : LobBaseRequest<BankAccountRequest, BankAccountResponse, BankAccountFilter>, ILobBankAccounts
+    public class LobBankAccounts : LobBaseRequest<BankAccountRequest, BankAccountResponse, BankAccountFilter>, ILobBankAccounts
     {
         private const string URL = "/v1/bank_accounts";
 
@@ -14,7 +15,7 @@ namespace Lob.Net
         {
         }
 
-        public Task<BankAccountResponse> VerifyAsync(string id, int amountInCents1, int amountInCents2)
+        public Task<BankAccountResponse> VerifyAsync(string id, int amountInCents1, int amountInCents2, CancellationToken cancellationToken = default)
         {
             return lobCommunicator.PostAsync<BankAccountResponse>($"{URL}/{id}/verify", new
             {
@@ -23,7 +24,7 @@ namespace Lob.Net
                     amountInCents1,
                     amountInCents2
                 }
-            });
+            }, cancellationToken);
         }
     }
 }

@@ -3,14 +3,16 @@ using Lob.Net.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lob.Net
 {
-    internal class LobCommunicator : ILobCommunicator
+    public class LobCommunicator : ILobCommunicator
     {
         protected readonly LobSerializerSettings serializerSettings;
         protected readonly HttpClient client;
@@ -28,11 +30,11 @@ namespace Lob.Net
             }
 
             client = httpClientFactory.CreateClient(CoreValues.HTTP_CLIENT_NAME);
-            client.BaseAddress = new Uri(CoreValues.SERVER_URL, UriKind.Absolute);
+            client.BaseAddress = new Uri(lobOptions.Value.ServerUrl, UriKind.Absolute);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Lob.Net", CoreValues.VERSION));
-            client.DefaultRequestHeaders.Add("Lob-Version", CoreValues.VERSION);
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Lob.Net", lobOptions.Value.Version));
+            client.DefaultRequestHeaders.Add("Lob-Version", lobOptions.Value.Version);
 
             var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{apiKey}:"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
@@ -40,31 +42,36 @@ namespace Lob.Net
             this.serializerSettings = serializerSettings;
         }
 
-        async Task<T> ILobCommunicator.GetAsync<T>(string url)
+        public async Task<T> GetAsync<T>(string url, CancellationToken cancellationToken = default)
         {
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync(url, cancellationToken);
             return await ProcessResponseAsync<T>(response);
         }
 
-        async Task<T> ILobCommunicator.DeleteAsync<T>(string url)
+        public async Task<T> DeleteAsync<T>(string url, CancellationToken cancellationToken = default)
         {
-            var response = await client.DeleteAsync(url);
+            var response = await client.DeleteAsync(url, cancellationToken);
             return await ProcessResponseAsync<T>(response);
         }
 
-        Task<T> ILobCommunicator.PostAsync<T>(string url, object body, string idempotencyKey)
+        public Task<T> PostAsync<T>(string url, object body, CancellationToken cancellationToken = default)
+        {
+            return PostAsync<T>(url, body, (IDictionary<string, string>)null, cancellationToken);
+        }
+
+        public Task<T> PostAsync<T>(string url, object body, string idempotencyKey, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(idempotencyKey))
             {
-                return PostAsync<T>(url, body);
+                return PostAsync<T>(url, body, (IDictionary<string, string>)null, cancellationToken);
             }
 
-            return PostAsync<T>(url, body, (Name: "Idempotency-Key", Value: idempotencyKey));
+            return PostAsync<T>(url, body, new Dictionary<string, string> { { "Idempotency-Key", idempotencyKey } }, cancellationToken);
         }
 
-        Task<T> ILobCommunicator.PostAsync<T>(string url, object body, params (string Name, string Value)[] extraHeaders)
+        public Task<T> PostAsync<T>(string url, object body, IDictionary<string, string> extraHeaders, CancellationToken cancellationToken = default)
         {
-            return PostAsync<T>(url, body, extraHeaders);
+            return InternalPostAsync<T>(url, body, extraHeaders, cancellationToken);
         }
 
         private async Task<T> ProcessResponseAsync<T>(HttpResponseMessage response)
@@ -97,14 +104,17 @@ namespace Lob.Net
             return JsonConvert.DeserializeObject<T>(textResult, serializerSettings);
         }
 
-        private async Task<T> PostAsync<T>(string url, object body, params (string Name, string Value)[] extraHeaders)
+        private async Task<T> InternalPostAsync<T>(string url, object body, IDictionary<string, string> extraHeaders = null, CancellationToken cancellationToken = default)
         {
             var obj = JsonConvert.SerializeObject(body, Formatting.None, serializerSettings);
             var content = new StringContent(obj, Encoding.UTF8, "application/json");
 
-            foreach (var extraHeader in extraHeaders)
+            if (extraHeaders != null)
             {
-                content.Headers.TryAddWithoutValidation(extraHeader.Name, extraHeader.Value);
+                foreach (var kvp in extraHeaders)
+                {
+                    content.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value);
+                }
             }
 
             var response = await client.PostAsync(url, content);

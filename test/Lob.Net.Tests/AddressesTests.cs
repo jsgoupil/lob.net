@@ -24,7 +24,7 @@ namespace Lob.Net.Tests
             {
                 mock.When(HttpMethod.Post, "https://api.lob.com/v1/addresses")
                     .WithHeaders("Accept", "application/json")
-                    .WithHeaders("Lob-Version", "2018-06-05")
+                    .WithHeaders("Lob-Version", "2020-02-11")
                     .WithHeaders("Authorization", "Basic S2V5Og==")
                     .WithContent("{\"description\":\"MyDescription\",\"name\":\"MyName\",\"company\":\"MyCompany\",\"phone\":\"2065551234\",\"email\":\"contact@jsgoupil.com\",\"address_line1\":\"addr1\",\"address_line2\":\"addr2\",\"address_city\":\"city1\",\"address_state\":\"WA\",\"address_zip\":\"98103\",\"address_country\":\"US\",\"metadata\":{\"m1\":\"v1\",\"m2\":\"v2\"}}")
                     .Respond("application/json", "{\n    \"id\": \"adr_b8cf174eda20c810\",\n    \"description\": \"MyDescription\",\n    \"name\": \"MYNAME\",\n    \"company\": \"MYCOMPANY\",\n    \"phone\": \"2065551234\",\n    \"email\": \"contact@jsgoupil.com\",\n    \"address_line1\": \"ADDR1\",\n    \"address_line2\": \"ADDR2\",\n    \"address_city\": \"CITY1\",\n    \"address_state\": \"WA\",\n    \"address_zip\": \"98103\",\n    \"address_country\": \"UNITED STATES\",\n    \"metadata\": {\n        \"m1\": \"v1\",\n        \"m2\": \"v2\"\n    },\n    \"date_created\": \"2018-10-16T01:26:50.323Z\",\n    \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n    \"object\": \"address\"\n}");
@@ -133,8 +133,8 @@ namespace Lob.Net.Tests
             var serviceCollection = GetServiceProvider(mock =>
             {
                 mock.When(HttpMethod.Get, "https://api.lob.com/v1/addresses")
-                    .WithExactQueryString("offset=0&limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
-                    .Respond("application/json", "{\n    \"data\": [\n        {\n            \"id\": \"adr_b8cf174eda20c810\",\n            \"description\": \"MyDescription\",\n            \"name\": \"MYNAME\",\n            \"company\": \"MYCOMPANY\",\n            \"phone\": \"2065551234\",\n            \"email\": \"contact@jsgoupil.com\",\n            \"address_line1\": \"ADDR1\",\n            \"address_line2\": \"ADDR2\",\n            \"address_city\": \"CITY1\",\n            \"address_state\": \"WA\",\n            \"address_zip\": \"98103\",\n            \"address_country\": \"UNITED STATES\",\n            \"metadata\": {\n                \"m1\": \"v1\",\n                \"m2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-16T01:26:50.323Z\",\n            \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n            \"object\": \"address\"\n        }\n    ],\n    \"count\": 1,\n    \"object\": \"list\",\n    \"total_count\": 1\n}");
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"adr_b8cf174eda20c810\",\n            \"description\": \"MyDescription\",\n            \"name\": \"MYNAME\",\n            \"company\": \"MYCOMPANY\",\n            \"phone\": \"2065551234\",\n            \"email\": \"contact@jsgoupil.com\",\n            \"address_line1\": \"ADDR1\",\n            \"address_line2\": \"ADDR2\",\n            \"address_city\": \"CITY1\",\n            \"address_state\": \"WA\",\n            \"address_zip\": \"98103\",\n            \"address_country\": \"UNITED STATES\",\n            \"metadata\": {\n                \"m1\": \"v1\",\n                \"m2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-16T01:26:50.323Z\",\n            \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n            \"object\": \"address\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
                 mock.Fallback.Throw(new Exception("Fallback"));
             });
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -146,19 +146,53 @@ namespace Lob.Net.Tests
                 CreatedBefore = new DateTime(2017, 1, 1),
                 IncludeTotalCount = true,
                 Limit = 100,
-                Offset = 0,
                 Metadata = new Dictionary<string, string>
                 {
                     { "m1", "v1" },
                     { "m2", "v2" }
                 },
             });
-
+           
             Assert.Equal(1, result.Count);
             Assert.Equal(1, result.TotalCount);
             Assert.Equal("list", result.Object);
             Assert.Single(result.Data);
             Assert.NotNull(result.Data[0]);
+        }
+
+        [Fact]
+        public async Task ListObjectsRequest()
+        {
+            var serviceCollection = GetServiceProvider(mock =>
+            {
+                mock.When(HttpMethod.Get, "https://api.lob.com/v1/addresses")
+                    .WithExactQueryString("limit=100&include%5B%5D=total_count&metadata%5Bm1%5D=v1&metadata%5Bm2%5D=v2&date_created=%7B%22gt%22%3A%222015-12-12T00%3A00%3A00.0000000%22%2C%22lt%22%3A%222017-01-01T00%3A00%3A00.0000000%22%7D")
+                    .Respond("application/json", "{\n    \"count\": 1,\n    \"data\": [\n        {\n            \"id\": \"adr_b8cf174eda20c810\",\n            \"description\": \"MyDescription\",\n            \"name\": \"MYNAME\",\n            \"company\": \"MYCOMPANY\",\n            \"phone\": \"2065551234\",\n            \"email\": \"contact@jsgoupil.com\",\n            \"address_line1\": \"ADDR1\",\n            \"address_line2\": \"ADDR2\",\n            \"address_city\": \"CITY1\",\n            \"address_state\": \"WA\",\n            \"address_zip\": \"98103\",\n            \"address_country\": \"UNITED STATES\",\n            \"metadata\": {\n                \"m1\": \"v1\",\n                \"m2\": \"v2\"\n            },\n            \"date_created\": \"2018-10-16T01:26:50.323Z\",\n            \"date_modified\": \"2018-10-16T01:26:50.323Z\",\n            \"object\": \"address\"\n        }\n    ],\n    \"next_url\": null,\n    \"object\": \"list\",\n    \"previous_url\": null,\n    \"total_count\": 1\n}");
+                mock.Fallback.Throw(new Exception("Fallback"));
+            });
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var addresses = serviceProvider.GetService<ILobAddresses>();
+            var enumerable = addresses.ListObjectsAsync(new AddressFilter
+            {
+                CreatedAfter = new DateTime(2015, 12, 12),
+                CreatedBefore = new DateTime(2017, 1, 1),
+                IncludeTotalCount = true,
+                Limit = 100,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "m1", "v1" },
+                    { "m2", "v2" }
+                },
+            });
+            var list = new List<AddressResponse>();
+            await foreach (var data in enumerable)
+            {
+                list.Add(data);
+            }
+
+            Assert.Single(list);
+            Assert.NotNull(list[0]);
         }
     }
 }

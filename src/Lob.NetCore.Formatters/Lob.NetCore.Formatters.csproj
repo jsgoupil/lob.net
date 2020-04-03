@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>Lob.NetCore.Formatters</AssemblyName>
+    <RootNamespace>Lob.NetCore.Formatters</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Wrapper for the Lob.com API. Formatters used for Webhooks. For .NET Core 3.0</Description>
+    <Author>Jean-Sébastien Goupil</Author>
+    <Authors>Jean-Sébastien Goupil</Authors>
+    <Title>Lob.Net.Formatters - For Webhooks</Title>
+    <Copyright>Copyright © Jean-Sébastien Goupil 2020</Copyright>
+    <Version>0.0.1</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>mail snailmail lob postage letter postcard check webhooks formatters</PackageTags>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/jsgoupil/lob.net/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jsgoupil/lob.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jsgoupil/lob.net</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Lob.Net\Lob.Net.csproj" />
+  </ItemGroup>
+</Project>
